@@ -143,3 +143,14 @@ css-loader是用来将css插入到页面的style标签:npm install --save-dev cs
   }
 
 #将css分离出来（前面css是引入到js里面的，实际开发分离出来居多）
+1、安装npm install --save-dev extract-text-webpack-plugin
+2、引入：安装完成后，需要先用require引入。const extractTextPlugin = require("extract-text-webpack-plugin");
+3、设置Plugins：引入成功后需要在plugins属性中进行配置。new extractTextPlugin("/css/index.css")
+
+#处理图片 <img src="images/timg.jpg" /> 打包问题
+1、安装npm install html-withimg-loader --save
+2、配置loader
+{
+    test: /\.(htm|html)$/i,
+     use:[ 'html-withimg-loader'] 
+}
