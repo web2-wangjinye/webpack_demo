@@ -5,8 +5,7 @@ const extractTextPlugin = require("extract-text-webpack-plugin");
 // 消除未使用的css
 const glob = require('glob');
 const PurifyCSSPlugin = require("purifycss-webpack");
-const entry = require("./webpack_config/entry_webpack.js")
-console.log(process.env.type)
+// const entry = require("./webpack_config/entry_webpack.js") 提取入口文件
 if(process.env.type== "build"){
     var website={
         publicPath:"http://localhost:1717/"
@@ -26,13 +25,14 @@ module.exports={
 //        ignored: /node_modules/    //不需要监控的文件
 //    },
     //入口文件的配置项
-    entry:entry.path,
+    // entry:entry.path,
+    entry:glob.sync('./src/js/*.js'),
     //出口文件的配置项
     output:{
         //输出的路径，用了Node语法
         path:path.resolve(__dirname,'./dist'),
         //输出的文件名称
-        filename:'[name].js',
+        filename:'js/[name].js',
         // 分离css时处理图片问题
         publicPath:website.publicPath
     },

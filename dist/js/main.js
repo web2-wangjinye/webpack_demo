@@ -67,14 +67,22 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__(1);
+module.exports = __webpack_require__(4);
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-var _black = __webpack_require__(1);
+var _black = __webpack_require__(2);
 
 var _black2 = _interopRequireDefault(_black);
 
-var _index = __webpack_require__(2);
+var _index = __webpack_require__(3);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -82,22 +90,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // document.getElementById('title').innerHTML='Hello Webpack';
 {
-  var jspangString = 'Hello 11Webpack';
+  var jspangString = 'Hello 1ss1Webpack';
   document.getElementById('title').innerHTML = jspangString;
-  console.log(311);
+  console.log(312221);
 }
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+document.getElementById('title2').innerHTML = 'Hello Webpack123';
 
 /***/ })
 /******/ ]);
