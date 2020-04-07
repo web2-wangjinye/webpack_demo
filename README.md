@@ -142,7 +142,7 @@ css-loader是用来将css插入到页面的style标签:npm install --save-dev cs
     "presets": ["es2015"]
   }
 
-#将css分离出来（前面css是引入到js里面的，实际开发分离出来居多）
+#将css分离出来
 1、安装npm install --save-dev extract-text-webpack-plugin
 2、引入：安装完成后，需要先用require引入。const extractTextPlugin = require("extract-text-webpack-plugin");
 3、设置Plugins：引入成功后需要在plugins属性中进行配置。new extractTextPlugin("/css/index.css")
@@ -154,3 +154,17 @@ css-loader是用来将css插入到页面的style标签:npm install --save-dev cs
     test: /\.(htm|html)$/i,
      use:[ 'html-withimg-loader'] 
 }
+
+#打包Less文件和sass文件
+
+#CSS进阶：自动处理CSS3属性前缀
+1、PostCSS是一个CSS的处理平台，它可以帮助你的CSS实现更多的功能，但是今天我们就通过其中的一个加前缀的功能，初步了解一下PostCSS。
+2、安装自动添加前缀的插件npm install --save-dev postcss-loader autoprefixer
+3、建立postcss.config.js
+
+#CSS进阶：消除未使用的CSS
+1、安装PurifyCSS-webpack这是一个插件，而不是loader。所以这个需要安装还需要引入:npmn  i -D purifycss-webpack purify-css
+
+#webpack增加babel支持
+
+#打包后如何调试

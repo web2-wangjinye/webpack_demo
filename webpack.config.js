@@ -2,15 +2,31 @@ let path = require('path');
 const uglify = require('uglifyjs-webpack-plugin');
 const htmlPlugin= require('html-webpack-plugin');
 const extractTextPlugin = require("extract-text-webpack-plugin");
-var website ={
-    publicPath:"http://192.168.1.64:1717/"//注意，这里的IP和端口，是你本机的ip或者是你devServer配置的IP和端口。
+// 消除未使用的css
+const glob = require('glob');
+const PurifyCSSPlugin = require("purifycss-webpack");
+const entry = require("./webpack_config/entry_webpack.js")
+console.log(process.env.type)
+if(process.env.type== "build"){
+    var website={
+        publicPath:"http://localhost:1717/"
+    }
+}else{
+    var website={
+        publicPath:"http://localhost:1717/"
+    }
 }
 module.exports={
+//    //监控代码变化代码一变化就自动进行实时打包
+//    watch:true,
+//    //监控的选项
+//    watchOptions:{
+//        poll:1000,     //每秒访问1000次
+//        aggregateTimeout: 500,      //防抖，500毫秒内输入的东西只打包一次，如果写一个字母就打包一次，性能会很低
+//        ignored: /node_modules/    //不需要监控的文件
+//    },
     //入口文件的配置项
-    entry:{
-        entry:'./src/entry.js',
-        entry2:'./src/entry2.js'
-    },
+    entry:entry.path,
     //出口文件的配置项
     output:{
         //输出的路径，用了Node语法
@@ -28,7 +44,10 @@ module.exports={
               //use: [ 'style-loader', 'css-loader' ]//未分离css时使用
               use: extractTextPlugin.extract({
                 fallback: "style-loader",
-                use: "css-loader"
+                use:  [
+                    { loader: 'css-loader', options: { importLoaders: 1 } },
+                    'postcss-loader'
+                ]
               })
             },{
                 test:/\.(png|jpg|gif)/ ,//是匹配图片文件后缀名称
@@ -42,21 +61,37 @@ module.exports={
                 }]
              },{
                 test: /\.js$/,
-                use: [{
-                  loader: 'babel-loader',
-                  options: {
-                     presets: ['es2015']
-                  }
-                }]
+                use:{
+                    loader:'babel-loader',
+                },
+                exclude:/node_modules/
               },{
                 test: /\.(htm|html)$/i,
                  use:[ 'html-withimg-loader'] 
+            },{
+                test: /\.less$/,//打包Less文件
+                // use: [{//未分离less文件时
+                //        loader: "style-loader" // creates style nodes from JS strings
+                //     }, {
+                //         loader: "css-loader" // translates CSS into CommonJS
+                //     }, {
+                //         loader: "less-loader" // compiles Less to CSS
+                //     }]
+                use: extractTextPlugin.extract({
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "less-loader"
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
             }
         ]
     },
     //插件，用于生产模版和各项功能
     plugins:[
-        new uglify(),
+        // new uglify(),
         new htmlPlugin({
             minify:{//是对html文件进行压缩，removeAttrubuteQuotes是却掉属性的双引号
                 removeAttributeQuotes:true
@@ -65,7 +100,11 @@ module.exports={
             template:'./src/index.html'//是要打包的html模版路径和文件名称
 
         }),
-        new extractTextPlugin("/css/index.css")//这里的/css/index.css是分离后的路径位置。
+        new extractTextPlugin("/css/index.css"),//这里的/css/index.css是分离后的路径位置。
+        new PurifyCSSPlugin({
+            // Give paths to parse for rules. These should be absolute!
+            paths: glob.sync(path.join(__dirname, 'src/*.html')),
+            })
     ],
     //配置webpack开发服务功能
     devServer:{
