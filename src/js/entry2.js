@@ -1,1 +1,0 @@
-document.getElementById('title2').innerHTML='Hello Webpack123';

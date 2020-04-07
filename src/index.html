@@ -1,16 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>jspang webpack</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/index.css"/>
 </head>
 <body>
-    <div id="title"></div>
-    <div id="title2"></div>
-    <div id="tupian"></div>
-    <div id="gogo"></div>
-    <img src="images/timg.jpg" />
+  <!--# include file="common/head/head.html" -->
+  <div>123456</div>
+  <img src="./images/timg.jpg" />
+   <!--# include file="common/foot/foot.html" -->
+  <script type="text/javascript" src="js/jquery.js"></script>
+ <script type="text/javascript" src="js/api.js"></script>
+ <script>
+  isLogin().then((res) => {
+    console.log(res);
+  })
+  statisticTmCategory({keyword:""}).then((res) => {
+    console.log(res);
+  })
+  list({page:1,limit:20}).then((res) => {
+    console.log(res);
+  })
+  var datajson={tmMonitorExpressions: [{name: "tmName", value: "1", type: "AND"}], page: 1, limit: 20, order: ""}
+  postJson(datajson).then((res) => {
+    console.log(res);
+  })
+  </script>
 </body>
 </html>

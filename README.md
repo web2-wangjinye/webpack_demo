@@ -167,4 +167,10 @@ css-loader是用来将css插入到页面的style标签:npm install --save-dev cs
 
 #webpack增加babel支持
 
-#打包后如何调试
+#清除dist文件
+
+1、const clear= require("clean-webpack-plugin");  //导入清除dist插件 不用手动每次去删除dist文件
+2、在plugins中添加new clear()////导入模块清除dist插件 不用手动每次去删除dist文件
+
+
+#压缩js和压缩css分开进行

@@ -1,10 +1,10 @@
 //声明entry变量
-const entry ={};  
+const entrycss ={};  
 const glob = require('glob');
-let jspath = glob.sync('./src/js/*.js');
+let jspath = glob.sync('./src/css/*.css');
 jspath.map(function(item,index){
   var name =item.split("/")[item.split("/").length-1]
-  entry[name.split(".")[0]]=item
+  entrycss[name.split(".")[0]]=item
 })
 //声明路径属性
 // entry.path={
@@ -12,4 +12,4 @@ jspath.map(function(item,index){
 //   entry2:'./src/entry2.js'
 // }
 //进行模块化
-module.exports =entry;
+module.exports =entrycss;

@@ -5,7 +5,9 @@ const extractTextPlugin = require("extract-text-webpack-plugin");
 // 消除未使用的css
 const glob = require('glob');
 const PurifyCSSPlugin = require("purifycss-webpack");
-// const entry = require("./webpack_config/entry_webpack.js") 提取入口文件
+const entry = require("./webpack_config/entry_webpack.js") //提取入口文件
+const entrycss = require("./webpack_config/entrycss_webpack.js") //提取入口文件
+
 if(process.env.type== "build"){
     var website={
         publicPath:"http://localhost:1717/"
@@ -15,6 +17,7 @@ if(process.env.type== "build"){
         publicPath:"http://localhost:1717/"
     }
 }
+
 module.exports={
 //    //监控代码变化代码一变化就自动进行实时打包
 //    watch:true,
@@ -24,18 +27,30 @@ module.exports={
 //        aggregateTimeout: 500,      //防抖，500毫秒内输入的东西只打包一次，如果写一个字母就打包一次，性能会很低
 //        ignored: /node_modules/    //不需要监控的文件
 //    },
+/******************js文件****************/
     //入口文件的配置项
-    // entry:entry.path,
-    entry:glob.sync('./src/js/*.js'),
-    //出口文件的配置项
-    output:{
+    // entry:entry,
+    // // entry:glob.sync('./src/js/*.js'),
+    // //出口文件的配置项
+    // output:{
+    //     //输出的路径，用了Node语法
+    //     path:path.resolve(__dirname,'./dist'),
+    //     //输出的文件名称
+    //     filename:'js/[name].js',
+    //     // 分离css时处理图片问题
+    //     publicPath:website.publicPath
+    // },
+/******************cs文件****************/
+     entry: entrycss,
+     output:{
         //输出的路径，用了Node语法
         path:path.resolve(__dirname,'./dist'),
         //输出的文件名称
-        filename:'js/[name].js',
+        filename:'css/[name].css',
         // 分离css时处理图片问题
         publicPath:website.publicPath
     },
+
     //模块：例如解读CSS,图片如何转换，压缩
     module:{
         rules: [
@@ -47,7 +62,8 @@ module.exports={
                 use:  [
                     { loader: 'css-loader', options: { importLoaders: 1 } },
                     'postcss-loader'
-                ]
+                ],
+                publicPath:"../"
               })
             },{
                 test:/\.(png|jpg|gif)/ ,//是匹配图片文件后缀名称
@@ -92,15 +108,35 @@ module.exports={
     //插件，用于生产模版和各项功能
     plugins:[
         // new uglify(),
-        new htmlPlugin({
-            minify:{//是对html文件进行压缩，removeAttrubuteQuotes是却掉属性的双引号
-                removeAttributeQuotes:true
-            },
-            hash:true,//为了开发中js有缓存效果，所以加入hash，这样可以有效避免缓存JS
-            template:'./src/index.html'//是要打包的html模版路径和文件名称
+        // new htmlPlugin({
+        //     minify:{//是对html文件进行压缩，removeAttrubuteQuotes是却掉属性的双引号
+        //         removeAttributeQuotes:true
+        //     },
+        //     hash:true,//为了开发中js有缓存效果，所以加入hash，这样可以有效避免缓存JS
+        //     template:'./src/index.html'//是要打包的html模版路径和文件名称
 
+        // }),
+        new htmlPlugin({
+            chunks: ['index'],
+            filename: 'index.html',
+            template: './src/index.html',
+            inject: true,
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+            },
         }),
-        new extractTextPlugin("/css/index.css"),//这里的/css/index.css是分离后的路径位置。
+        new htmlPlugin({
+            chunks: ['about'],
+            filename: 'about.html',
+            template: './src/about.html',
+            inject: true,
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+            },
+        }),
+        new extractTextPlugin('css/[name].css'),//这里的/css/index.css是分离后的路径位置。
         new PurifyCSSPlugin({
             // Give paths to parse for rules. These should be absolute!
             paths: glob.sync(path.join(__dirname, 'src/*.html')),
@@ -115,6 +151,16 @@ module.exports={
         //服务端压缩是否开启
         compress:true,
         //配置服务端口号
-        port:1717
+        port:1717,
+        proxy:{//代理
+			"/api":{//请求v2下的接口都会被代理到 target： http://xxx.xxx.com 中
+				target:'http://192.168.1.156:8077/',
+				changeOrigin: true,
+				secure: false,// 接受 运行在 https 上的服务
+				pathRewrite:{'^/api':''}
+ 
+ 
+			}
+		}
     }
 }

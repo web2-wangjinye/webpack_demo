@@ -1,12 +1,3 @@
 body{
-  background-color: red;
-  /* color: white; */
-}
-#tupian{
-  background-image: url(../images/logo.png);
-  width:466px;
-  height:453px;
-}
-a{
-  color:red
+  border:10px solid green
 }
